@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="manifest" href="/4xstrategy-card/manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="/4xstrategy-card/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/4xstrategy-card/icons/favicon-16.png">
+<link rel="apple-touch-icon" href="/4xstrategy-card/icons/apple-touch-icon.png">
+<meta name="theme-color" content="#05080d">
+<meta name="msapplication-config" content="/4xstrategy-card/browserconfig.xml">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DaVincii">
+<title>Paul Stoeppelwerth — 4xStrategy</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%;background:#000;overflow-x:hidden}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:18px}
+body{display:flex;align-items:flex-start;justify-content:center;font-family:'Rajdhani',sans-serif;background:radial-gradient(circle at 50% 18%, rgba(167,242,140,.10), transparent 28%),radial-gradient(circle at 50% 55%, #07111a 0%, #02060a 46%, #000 100%);padding:max(18px, env(safe-area-inset-top)) 0 max(22px, env(safe-area-inset-bottom));}
+body::before,body::after{content:'';position:fixed;inset:-10%;pointer-events:none;z-index:0;background-repeat:no-repeat;mix-blend-mode:screen}
+body::before{opacity:.22;background-image:radial-gradient(circle at 18% 26%, rgba(220,255,255,.8) 0 1px, transparent 2px),radial-gradient(circle at 74% 19%, rgba(220,255,255,.7) 0 1px, transparent 2px),radial-gradient(circle at 84% 68%, rgba(220,255,255,.4) 0 1px, transparent 2px),radial-gradient(circle at 24% 78%, rgba(220,255,255,.35) 0 1px, transparent 2px),radial-gradient(circle at 58% 62%, rgba(220,255,255,.3) 0 1px, transparent 2px),radial-gradient(circle at 42% 40%, rgba(220,255,255,.25) 0 1px, transparent 2px);animation:drift 18s linear infinite}
+body::after{opacity:.22;filter:blur(12px);background-image:radial-gradient(circle at 30% 18%, rgba(167,242,140,.42) 0 2px, transparent 5px),radial-gradient(circle at 70% 78%, rgba(167,242,140,.26) 0 2px, transparent 6px),radial-gradient(circle at 84% 34%, rgba(167,242,140,.20) 0 2px, transparent 7px),radial-gradient(circle at 14% 60%, rgba(167,242,140,.18) 0 2px, transparent 7px);animation:driftReverse 24s linear infinite}
+@keyframes drift{to{transform:translate3d(-2%,1.5%,0)}} @keyframes driftReverse{to{transform:translate3d(2%,-1.5%,0)}}
+#particleCanvas{position:fixed;inset:0;z-index:0;opacity:.8;mix-blend-mode:screen}
+.cursor-glow{position:fixed;width:340px;height:340px;border-radius:50%;pointer-events:none;z-index:1;opacity:0;background:radial-gradient(circle, rgba(167,242,140,.26) 0%, rgba(167,242,140,.12) 24%, rgba(167,242,140,.04) 46%, rgba(0,229,255,0) 72%);filter:blur(14px);transform:translate(-50%,-50%);transition:opacity .25s ease;mix-blend-mode:screen}
+.card-wrap{position:relative;z-index:2;perspective:1600px;width:100%;display:flex;justify-content:center;align-items:flex-start;padding:0 12px;}
+.card{position:relative;width:min(420px,92vw);max-width:420px;background:linear-gradient(160deg,#05080d 0%,#0b1118 42%,#04070b 100%);border:1px solid rgba(167,242,140,.14);border-radius:22px;padding:34px 28px 30px;box-shadow:0 0 90px rgba(167,242,140,.08), inset 0 1px 0 rgba(255,255,255,.05);transform:rotateX(0) rotateY(0);transition:transform .18s ease-out, box-shadow .18s ease-out, border-color .18s ease-out;overflow:hidden;isolation:isolate;backdrop-filter:blur(6px);transform-style:preserve-3d;margin:0 auto;}
+.card::before{content:'';position:absolute;inset:-1px;border-radius:22px;padding:1px;background:conic-gradient(from 180deg, transparent, rgba(167,242,140,.17), transparent, rgba(167,242,140,.05), transparent);opacity:.48;animation:borderSpin 12s linear infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.card::after{content:'';position:absolute;left:-15%;right:-15%;top:-12%;height:110px;background:radial-gradient(circle at 50% 50%, rgba(167,242,140,.14), transparent 62%);filter:blur(28px);pointer-events:none}
+@keyframes borderSpin{to{transform:rotate(360deg)}}
+.beam{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#A7F28C,transparent);animation:beamSlide 3s ease-in-out infinite}
+@keyframes beamSlide{0%,100%{opacity:.3;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.logo-section{text-align:center;margin-bottom:8px;position:relative;z-index:3}
+.logo-text{font-family:'Orbitron',monospace;font-size:24px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#A7F28C 0%,#8DDE71 40%,#F2FFF0 60%,#A7F28C 100%);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(167,242,140,.30))}
+@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.logo-sub{font-size:10px;font-weight:400;letter-spacing:5px;text-transform:uppercase;color:rgba(167,242,140,.54);margin-top:6px}
+.avatar-wrap{display:flex;justify-content:center;margin:-6px 0 -2px;position:relative;z-index:3}
+.avatar{position:relative;width:280px;height:280px;display:flex;align-items:center;justify-content:center;transform-style:preserve-3d;transition:transform .18s ease-out, filter .18s ease-out;will-change:transform, filter}
+.avatar::before{content:'';position:absolute;inset:30px;border-radius:50%;background:radial-gradient(circle, rgba(167,242,140,.14) 0%, rgba(167,242,140,.06) 34%, transparent 72%);filter:blur(12px);animation:coreGlow 4s ease-in-out infinite}
+@keyframes coreGlow{0%,100%{opacity:.72;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+.avatar::after{content:'';position:absolute;left:28px;right:28px;top:50%;height:86px;transform:translateY(-50%);
+background:repeating-linear-gradient(180deg, rgba(167,242,140,.06) 0 1px, transparent 1px 8px);
+opacity:.28;pointer-events:none;mask-image:linear-gradient(180deg, transparent, black 18%, black 82%, transparent)}
+.avatar svg{width:100%;height:100%;display:block;overflow:visible}
+
+.avatar::after{content:'';position:absolute;left:24px;right:24px;bottom:58px;height:58px;opacity:.50;
+background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 232 58'><polyline points='0,42 24,38 46,40 70,28 95,32 119,15 146,21 170,12 196,18 232,6' fill='none' stroke='%23A7F28C' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+background-size:100% 100%;background-repeat:no-repeat;filter:drop-shadow(0 0 8px rgba(167,242,140,.22));pointer-events:none}
+
+.ring{fill:none;stroke:#A7F28C;transform-origin:140px 140px}.ring.outer1{stroke-opacity:.12;stroke-width:1;animation:slowSpin 22s linear infinite}.ring.outer2{stroke-opacity:.18;stroke-width:1.2;animation:slowSpinReverse 18s linear infinite}.ring.outer3{stroke-opacity:.08;stroke-width:1;animation:slowSpin 30s linear infinite}.ring.inner1{stroke-opacity:.20;stroke-width:1.3;animation:pulseRing 4s ease-in-out infinite}.ring.inner2{stroke-opacity:.28;stroke-width:1.5;animation:pulseRing 3s ease-in-out infinite reverse}.ring.inner3{stroke-opacity:.14;stroke-width:.85;stroke-dasharray:2 8;animation:pulseRing 5.2s ease-in-out infinite}
+@keyframes slowSpin{to{transform:rotate(360deg)}} @keyframes slowSpinReverse{to{transform:rotate(-360deg)}} @keyframes pulseRing{0%,100%{opacity:.16;transform:scale(1)}50%{opacity:.34;transform:scale(1.02)}}
+.grid{stroke:#A7F28C;stroke-opacity:.08;stroke-width:.9}.guide{stroke:#A7F28C;stroke-opacity:.06;stroke-width:.8}
+.orbital{fill:none;stroke:#A7F28C;stroke-opacity:.18;stroke-width:1.1;transform-origin:140px 140px;animation:orbitalDrift 14s ease-in-out infinite}.orbital.alt{stroke-opacity:.14;animation-duration:17s;animation-direction:reverse}.orbital.alt2{stroke-opacity:.10;stroke-width:.9;animation-duration:20s}
+@keyframes orbitalDrift{0%,100%{transform:rotate(0deg) scale(1)}50%{transform:rotate(5deg) scale(1.01)}}
+.signal{stroke:#A7F28C;stroke-width:1.25;stroke-linecap:round;stroke-dasharray:3 12;opacity:.7;animation:flow 5.6s linear infinite}.signal.fast{animation-duration:3.8s;opacity:.86}.signal.slow{animation-duration:7.5s;opacity:.5}.signal.soft{stroke-opacity:.28;stroke-width:.9;stroke-dasharray:2 14}.signal.wave{stroke-opacity:.46;stroke-width:1;stroke-dasharray:1 10;animation-duration:6.8s}
+@keyframes flow{from{stroke-dashoffset:0}to{stroke-dashoffset:-84}}
+.node{fill:#A7F28C;filter:drop-shadow(0 0 10px rgba(0,229,255,.95));animation:nodePulse 3.8s ease-in-out infinite}.node.alt{animation-duration:4.7s}.node.slow{animation-duration:5.3s}.node.fast{animation-duration:2.9s}.spark{fill:#eaffff;filter:drop-shadow(0 0 10px rgba(255,255,255,.9));animation:sparkPulse 2.8s ease-in-out infinite}.core{fill:#ffffff;filter:drop-shadow(0 0 18px rgba(255,255,255,1));animation:corePulse 2.4s ease-in-out infinite}
+@keyframes nodePulse{0%,100%{opacity:.72;transform:scale(1)}35%{opacity:.88;transform:scale(1.09)}50%{opacity:1;transform:scale(1.24)}75%{opacity:.82;transform:scale(1.05)}} @keyframes sparkPulse{0%,100%{opacity:.76;transform:scale(1)}50%{opacity:1;transform:scale(1.14)}} @keyframes corePulse{0%,100%{opacity:.82;transform:scale(1)}50%{opacity:1;transform:scale(1.34)}}
+.lensflare{fill:url(#flareGrad);opacity:.74;animation:flarePulse 3.4s ease-in-out infinite}.flare-core{fill:url(#flareCoreGrad);opacity:.85;animation:flareCorePulse 2.2s ease-in-out infinite}.flare-ray{stroke:url(#rayGrad);stroke-width:1.4;stroke-linecap:round;opacity:.5;animation:rayPulse 3.6s ease-in-out infinite}.flare-ray.alt{animation-duration:4.4s;opacity:.34}
+@keyframes flarePulse{0%,100%{opacity:.42;transform:scale(1)}50%{opacity:.82;transform:scale(1.12)}} @keyframes flareCorePulse{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.22)}} @keyframes rayPulse{0%,100%{opacity:.28}50%{opacity:.68}}
+.divider{height:1px;margin:0 auto 20px;width:60%;background:linear-gradient(90deg,transparent,rgba(167,242,140,.25),transparent)}
+.name{font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:#F2FFF0;letter-spacing:3px;text-align:center;text-shadow:0 0 30px rgba(167,242,140,.20);position:relative;z-index:3}
+.title{font-size:13px;font-weight:400;letter-spacing:4px;text-transform:uppercase;color:rgba(167,242,140,.42);text-align:center;margin-top:4px;margin-bottom:18px;position:relative;z-index:3}
+.contact-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;position:relative;z-index:3}
+.contact-row{display:flex;align-items:center;gap:14px;padding:10px 16px;border-radius:10px;background:rgba(0,229,255,.03);border:1px solid rgba(167,242,140,.06);transition:all .3s ease;text-decoration:none;cursor:pointer}
+.contact-row:hover{background:rgba(167,242,140,.07);border-color:rgba(167,242,140,.15);transform:translateX(4px);box-shadow:0 0 20px rgba(167,242,140,.05)}
+.contact-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:rgba(167,242,140,.08);flex-shrink:0}.contact-icon svg{width:16px;height:16px;stroke:#A7F28C;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.contact-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(167,242,140,.35);line-height:1}.contact-value{font-size:14px;color:#b2ebf2;font-weight:500;letter-spacing:.5px;line-height:1.2;margin-top:2px}
+.qr-section{display:flex;flex-direction:column;align-items:center;margin-top:4px;position:relative;z-index:3}.qr-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(167,242,140,.30);margin-bottom:12px}
+.qr-frame{position:relative;padding:12px;border-radius:14px;background:rgba(0,229,255,.03);border:1px solid rgba(167,242,140,.10);transition:all .4s ease}.qr-frame:hover{box-shadow:0 0 40px rgba(167,242,140,.10);border-color:rgba(167,242,140,.25)}
+.qr-frame canvas,.qr-frame img{border-radius:6px!important;display:block}
+.qr-corner{position:absolute;width:14px;height:14px;border-color:#A7F28C;border-style:solid;border-width:0}.qr-corner.tl{top:4px;left:4px;border-top-width:2px;border-left-width:2px;border-radius:4px 0 0 0}.qr-corner.tr{top:4px;right:4px;border-top-width:2px;border-right-width:2px;border-radius:0 4px 0 0}.qr-corner.bl{bottom:4px;left:4px;border-bottom-width:2px;border-left-width:2px;border-radius:0 0 0 4px}.qr-corner.br{bottom:4px;right:4px;border-bottom-width:2px;border-right-width:2px;border-radius:0 0 4px 0}
+.save-hint{margin-top:14px;font-size:10px;letter-spacing:2px;color:rgba(167,242,140,.25);text-transform:uppercase}
+.save-btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:10px 24px;border-radius:10px;border:1px solid rgba(167,242,140,.20);background:rgba(167,242,140,.06);color:#b2ebf2;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all .3s ease;cursor:pointer}
+.save-btn:hover{background:rgba(167,242,140,.12);border-color:rgba(167,242,140,.35);box-shadow:0 0 20px rgba(167,242,140,.08)} .save-btn svg{width:14px;height:14px;stroke:#A7F28C;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+
+50%{opacity:1;transform:scale(1.3)}
+}
+
+
+50%{opacity:1;transform:scale(1.22)}
+}
+
+
+.pulse-container{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.radial-core-wrap{padding:0;transform:scale(1.04);transform-origin:center center;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.radial-core-svg{width:100%;height:100%;overflow:visible}
+.avatar{width:430px;height:350px;overflow:hidden}
+.avatar-wrap{display:flex;justify-content:center;margin:-10px 0 -6px;position:relative;z-index:3}
+
+.rc-halo{fill:url(#rcGlow);opacity:.44;filter:url(#rcOuterGlow);animation:rcHalo 5.2s ease-in-out infinite}
+.rc-ring{fill:none;stroke:#A7F28C;transform-origin:260px 260px}
+.rc-ring-outer{stroke-opacity:.16;stroke-width:1.2;animation:rcSpinSlow 26s linear infinite}
+.rc-ring-mid{stroke-opacity:.22;stroke-width:1.35;animation:rcSpinReverse 18s linear infinite}
+.rc-ring-inner{stroke-opacity:.18;stroke-width:1.5;animation:rcSpinSlow 14s linear infinite}
+.rc-ring-core{stroke-opacity:.20;stroke-width:1.8}
+.rc-ring-core2{stroke-opacity:.26;stroke-width:1.4}
+.rc-boundary{fill:none;stroke:rgba(167,242,140,.08);stroke-width:1}
+.rc-dashed{fill:none;stroke:rgba(167,242,140,.18);stroke-width:1.2;stroke-dasharray:3 10;animation:rcSpinReverse 20s linear infinite}
+.rc-axis{stroke:rgba(167,242,140,.12);stroke-width:1.2}
+.rc-axis-soft{stroke:rgba(167,242,140,.07);stroke-width:1}
+.rc-orbit{fill:none;stroke:rgba(167,242,140,.12);stroke-width:1.1;transform-origin:260px 260px}
+.rc-orbit-a{animation:rcSpinSlow 22s linear infinite}
+.rc-orbit-b{animation:rcSpinReverse 28s linear infinite}
+.rc-orbit-c{animation:rcSpinSlow 16s linear infinite}
+.rc-spoke{stroke:rgba(167,242,140,.18);stroke-width:1.5;stroke-linecap:round}
+.rc-spoke-soft{stroke:rgba(167,242,140,.11);stroke-width:1.2;stroke-linecap:round}
+.rc-flow{fill:none;stroke-linecap:round;stroke-linejoin:round;filter:url(#rcSoftGlow)}
+.rc-flow-a{stroke:#A7F28C;stroke-width:2.9;animation:rcFlow 4.8s ease-in-out infinite}
+.rc-flow-b{stroke:rgba(240,255,232,.48);stroke-width:1.8;animation:rcFlow 6s ease-in-out infinite reverse}
+.rc-flow-c{stroke:rgba(167,242,140,.28);stroke-width:1.9;animation:rcFlow 5.4s ease-in-out infinite}
+.rc-core-aura{animation:rcPulse 3.4s ease-in-out infinite}
+.rc-core{filter:url(#rcSoftGlow);animation:rcCorePulse 2.6s ease-in-out infinite}
+.rc-core-dot{fill:#FFFFFF;filter:drop-shadow(0 0 8px rgba(255,255,255,.9));animation:rcCorePulse 2s ease-in-out infinite}
+.rc-node{fill:#F4FFE9;filter:drop-shadow(0 0 9px rgba(167,242,140,.34));animation:rcNode 3.1s ease-in-out infinite}
+.rc-node-soft{fill:rgba(220,255,210,.76);filter:drop-shadow(0 0 6px rgba(167,242,140,.18));animation:rcNode 4.4s ease-in-out infinite}
+.rc-node-2{animation-delay:.25s}.rc-node-3{animation-delay:.5s}.rc-node-4{animation-delay:.8s}.rc-node-5{animation-delay:1s}.rc-node-6{animation-delay:1.2s}.rc-node-7{animation-delay:1.4s}
+.rc-micro{fill:rgba(167,242,140,.62);filter:drop-shadow(0 0 4px rgba(167,242,140,.14));animation:rcMicro 4.2s ease-in-out infinite}
+.rc-bracket{fill:none;stroke:rgba(167,242,140,.24);stroke-width:2;stroke-linecap:round}
+
+@keyframes rcSpinSlow{to{transform:rotate(360deg)}}
+@keyframes rcSpinReverse{to{transform:rotate(-360deg)}}
+@keyframes rcFlow{0%,100%{transform:translateY(0px)}50%{transform:translateY(-2px)}}
+@keyframes rcPulse{0%,100%{opacity:.58;transform:scale(1)}50%{opacity:.86;transform:scale(1.07)}}
+@keyframes rcCorePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@keyframes rcNode{0%,100%{opacity:.76;transform:scale(1)}50%{opacity:1;transform:scale(1.22)}}
+@keyframes rcMicro{0%,100%{opacity:.46}50%{opacity:.82}}
+@keyframes rcHalo{0%,100%{opacity:.32}50%{opacity:.48}}
+
+.divider{height:1px;margin:0 auto 8px;width:84%;background:linear-gradient(90deg,transparent,rgba(167,242,140,.24),transparent)}
+.title{font-size:13px;font-weight:400;letter-spacing:4px;text-transform:uppercase;color:rgba(167,242,140,.42);text-align:center;margin-top:4px;margin-bottom:16px;position:relative;z-index:3}
+@media(max-width:680px){
+  .avatar{width:340px;height:280px;overflow:hidden}
+  .avatar-wrap{margin:-8px 0 -4px}
+  .divider{margin:0 auto 6px;width:82%}
+  .title{font-size:11px;letter-spacing:3px;margin-bottom:14px}
+}
+@media(max-width:420px){
+  .avatar{width:304px;height:246px;overflow:hidden}
+}
+
+@media(max-width:680px){
+body{display:block;overflow-y:auto;padding:max(12px, env(safe-area-inset-top)) 0 max(18px, env(safe-area-inset-bottom));}
+.card-wrap{display:flex;justify-content:center;align-items:flex-start;padding:0 10px;}
+.card{width:min(394px,94vw);max-width:394px;padding:24px 18px 22px;border-radius:18px;}
+.card::after{top:-10%;height:88px}
+.logo-section{margin-bottom:6px}
+.logo-text{font-size:18px;letter-spacing:4px}
+.logo-sub{font-size:9px;letter-spacing:4px}
+.avatar-wrap{margin:-4px 0 -4px}
+.avatar{width:210px;height:210px}.pulse-svg{width:99%}
+.divider{margin:0 auto 6px;width:82%}
+.name{font-size:17px;letter-spacing:2px}
+.title{font-size:11px;letter-spacing:3px;margin-bottom:14px}
+.contact-grid{gap:8px;margin-bottom:18px}
+.contact-row{padding:9px 12px;gap:10px}
+.contact-icon{width:30px;height:30px}
+.contact-icon svg{width:14px;height:14px}
+.contact-label{font-size:8px;letter-spacing:1.6px}
+.contact-value{font-size:12px}
+.qr-section{margin-top:2px}
+.qr-label{font-size:8px;letter-spacing:3px;margin-bottom:10px}
+.qr-frame{padding:10px}
+.save-hint{margin-top:10px;font-size:9px;letter-spacing:1.7px}
+.save-btn{margin-top:14px;padding:9px 18px;font-size:12px;letter-spacing:1.6px}
+}
+@media(max-width:420px){
+.card{width:min(372px,95vw);padding:22px 16px 20px}
+.logo-text{font-size:20px;letter-spacing:5px}
+.avatar{width:194px;height:194px}.pulse-svg{width:99%}
+.name{font-size:15px}
+.title{font-size:10px}
+}
+</style>
+</head>
+<body>
+<canvas id="particleCanvas"></canvas>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="card-wrap">
+  <div class="card" id="bizCard">
+    <div class="beam"></div>
+    <div class="logo-section">
+      <div class="logo-text">4XSTRATEGY</div>
+      <div class="logo-sub">Systematic FX Intelligence</div>
+    </div>
+    <div class="avatar-wrap">
+      <div class="avatar" id="logoWrap">
+
+
+
+
+<div class="pulse-container radial-core-wrap" aria-label="4xStrategy radial intelligence core">
+  <svg viewBox="0 0 520 520" class="pulse-svg radial-core-svg" role="img">
+    <defs>
+      <radialGradient id="rcGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#F4FFE9" stop-opacity="0.98"/>
+        <stop offset="18%" stop-color="#DDF8D2" stop-opacity="0.92"/>
+        <stop offset="42%" stop-color="#A7F28C" stop-opacity="0.42"/>
+        <stop offset="70%" stop-color="#A7F28C" stop-opacity="0.10"/>
+        <stop offset="100%" stop-color="#A7F28C" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="rcCore" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
+        <stop offset="34%" stop-color="#F0FFE8" stop-opacity="0.96"/>
+        <stop offset="100%" stop-color="#A7F28C" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="rcSoftGlow" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="7" result="blur"/>
+        <feMerge>
+          <feMergeNode in="blur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+      <filter id="rcOuterGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="14" result="blur"/>
+        <feMerge>
+          <feMergeNode in="blur"/>
+        </feMerge>
+      </filter>
+    </defs>
+
+    <!-- ambient field -->
+    <ellipse cx="260" cy="260" rx="190" ry="190" class="rc-halo"/>
+
+    <!-- structural rings -->
+    <circle cx="260" cy="260" r="184" class="rc-ring rc-ring-outer"/>
+    <circle cx="260" cy="260" r="156" class="rc-ring rc-ring-mid"/>
+    <circle cx="260" cy="260" r="126" class="rc-ring rc-ring-inner"/>
+    <circle cx="260" cy="260" r="88" class="rc-ring rc-ring-core"/>
+    <circle cx="260" cy="260" r="58" class="rc-ring rc-ring-core2"/>
+
+    <!-- crosshair/grid -->
+    <path d="M260 54 V466 M54 260 H466" class="rc-axis"/>
+    <path d="M116 116 L404 404 M404 116 L116 404" class="rc-axis-soft"/>
+    <circle cx="260" cy="260" r="208" class="rc-boundary"/>
+    <circle cx="260" cy="260" r="110" class="rc-dashed"/>
+
+    <!-- orbit paths -->
+    <ellipse cx="260" cy="260" rx="170" ry="98" class="rc-orbit rc-orbit-a"/>
+    <ellipse cx="260" cy="260" rx="138" ry="182" class="rc-orbit rc-orbit-b"/>
+    <ellipse cx="260" cy="260" rx="96" ry="152" class="rc-orbit rc-orbit-c"/>
+
+    <!-- signal spokes -->
+    <path d="M260 260 L260 104" class="rc-spoke"/>
+    <path d="M260 260 L396 168" class="rc-spoke"/>
+    <path d="M260 260 L416 278" class="rc-spoke-soft"/>
+    <path d="M260 260 L340 396" class="rc-spoke"/>
+    <path d="M260 260 L162 388" class="rc-spoke-soft"/>
+    <path d="M260 260 L108 286" class="rc-spoke"/>
+    <path d="M260 260 L132 154" class="rc-spoke-soft"/>
+
+    <!-- signal arcs -->
+    <path d="M120 300 C160 250, 222 220, 290 214 C352 208, 396 178, 430 134" class="rc-flow rc-flow-a"/>
+    <path d="M110 220 C166 180, 230 172, 302 180 C364 186, 410 216, 432 272" class="rc-flow rc-flow-b"/>
+    <path d="M154 382 C212 340, 286 324, 350 292 C392 272, 416 244, 430 204" class="rc-flow rc-flow-c"/>
+
+    <!-- core -->
+    <circle cx="260" cy="260" r="86" fill="url(#rcGlow)" class="rc-core-aura"/>
+    <circle cx="260" cy="260" r="32" fill="url(#rcCore)" class="rc-core"/>
+    <circle cx="260" cy="260" r="10" class="rc-core-dot"/>
+
+    <!-- nodes -->
+    <circle cx="260" cy="104" r="7" class="rc-node rc-node-1"/>
+    <circle cx="396" cy="168" r="6" class="rc-node rc-node-2"/>
+    <circle cx="416" cy="278" r="5" class="rc-node-soft rc-node-3"/>
+    <circle cx="340" cy="396" r="7" class="rc-node rc-node-4"/>
+    <circle cx="162" cy="388" r="5" class="rc-node-soft rc-node-5"/>
+    <circle cx="108" cy="286" r="6" class="rc-node rc-node-6"/>
+    <circle cx="132" cy="154" r="5" class="rc-node-soft rc-node-7"/>
+    <circle cx="184" cy="220" r="4" class="rc-micro"/>
+    <circle cx="220" cy="184" r="3.5" class="rc-micro"/>
+    <circle cx="318" cy="202" r="4" class="rc-micro"/>
+    <circle cx="348" cy="246" r="3.5" class="rc-micro"/>
+    <circle cx="304" cy="326" r="4" class="rc-micro"/>
+    <circle cx="216" cy="332" r="3.5" class="rc-micro"/>
+
+    <!-- terminal brackets -->
+    <path d="M48 88 H78 V58" class="rc-bracket"/>
+    <path d="M442 58 V88 H472" class="rc-bracket"/>
+    <path d="M78 462 V432 H48" class="rc-bracket"/>
+    <path d="M472 432 H442 V462" class="rc-bracket"/>
+  </svg>
+</div>
+
+</div>
+    </div>
+    <div class="divider"></div>
+    <div class="name">PAUL STOEPPELWERTH</div>
+    <div class="title">Partner</div>
+    <div class="contact-grid">
+      <a href="mailto:paul@4xstrategy.com" class="contact-row"><div class="contact-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg></div><div><div class="contact-label">Email</div><div class="contact-value">paul@4xstrategy.com</div></div></a>
+      <a href="https://4xstrategy.com/" target="_blank" rel="noopener noreferrer" class="contact-row"><div class="contact-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div><div class="contact-label">Web</div><div class="contact-value">www.4xstrategy.com</div></div></a>
+      <a href="tel:+13176071007" class="contact-row"><div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="contact-label">Phone</div><div class="contact-value">+1.317.607.1007</div></div></a>
+    </div>
+    <div class="qr-section">
+      <div class="qr-label">Scan to Save Contact</div>
+      <div class="qr-frame"><div class="qr-corner tl"></div><div class="qr-corner tr"></div><div class="qr-corner bl"></div><div class="qr-corner br"></div><div id="qrcode"></div></div>
+      <div class="save-hint">vCard · Tap or Scan</div>
+      <a href="https://davincii-ai.github.io/4xstrategy-card/paul/Paul_Stoeppelwerth_4xStrategy.vcf" class="save-btn"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Save Contact</a>
+    </div>
+  </div>
+</div>
+<script>
+const vcfUrl='https://davincii-ai.github.io/4xstrategy-card/paul/Paul_Stoeppelwerth_4xStrategy.vcf';
+new QRCode(document.getElementById('qrcode'),{text:vcfUrl,width:150,height:150,colorDark:'#A7F28C',colorLight:'#0a0a0f',correctLevel:QRCode.CorrectLevel.M});
+const card=document.getElementById('bizCard'),wrap=document.querySelector('.card-wrap'),logo=document.getElementById('logoWrap'),glow=document.getElementById('cursorGlow'),cv=document.getElementById('particleCanvas'),ctx=cv.getContext('2d');
+let particles=[],pointerX=window.innerWidth/2,pointerY=window.innerHeight/2;
+function resize(){cv.width=window.innerWidth*window.devicePixelRatio;cv.height=window.innerHeight*window.devicePixelRatio;cv.style.width=window.innerWidth+'px';cv.style.height=window.innerHeight+'px';ctx.setTransform(window.devicePixelRatio,0,0,window.devicePixelRatio,0,0);particles=Array.from({length:38},()=>({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:Math.random()*1.8+.5,a:Math.random()*.45+.08,vx:(Math.random()-.5)*.12,vy:(Math.random()-.5)*.12,pulse:Math.random()*Math.PI*2}))}
+resize();window.addEventListener('resize',resize);
+function animateParticles(time){ctx.clearRect(0,0,window.innerWidth,window.innerHeight);const t=time*.001;for(const p of particles){p.x+=p.vx;p.y+=p.vy;if(p.x<-20)p.x=window.innerWidth+20;if(p.x>window.innerWidth+20)p.x=-20;if(p.y<-20)p.y=window.innerHeight+20;if(p.y>window.innerHeight+20)p.y=-20;const dx=pointerX-p.x,dy=pointerY-p.y,dist=Math.sqrt(dx*dx+dy*dy),influence=Math.max(0,1-dist/220),radius=p.r+Math.sin(t+p.pulse)*.35+influence*1.2,alpha=p.a+influence*.18;ctx.beginPath();ctx.arc(p.x,p.y,Math.max(.2,radius),0,Math.PI*2);ctx.fillStyle=`rgba(120, 244, 255, ${alpha})`;ctx.fill()}requestAnimationFrame(animateParticles)}
+requestAnimationFrame(animateParticles);
+wrap.addEventListener('mousemove',e=>{pointerX=e.clientX;pointerY=e.clientY;const r=wrap.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`rotateY(${x*12}deg) rotateX(${-y*12}deg)`;logo.style.transform=`translateZ(24px) rotateY(${x*18}deg) rotateX(${-y*18}deg) scale(${1+Math.abs(x)*.02+Math.abs(y)*.02})`;card.style.boxShadow=`${-x*20}px ${y*20}px 90px rgba(167,242,140,.08), 0 0 110px rgba(167,242,140,.05), inset 0 1px 0 rgba(255,255,255,.05)`;card.style.borderColor=`rgba(0,229,255,${0.14+Math.min(.12,Math.abs(x)*.15+Math.abs(y)*.15)})`;glow.style.left=`${e.clientX}px`;glow.style.top=`${e.clientY}px`;glow.style.opacity='0.34'});
+wrap.addEventListener('mouseleave',()=>{card.style.transform='rotateX(0) rotateY(0)';logo.style.transform='translateZ(0) rotateY(0) rotateX(0) scale(1)';card.style.boxShadow='0 0 90px rgba(167,242,140,.08), inset 0 1px 0 rgba(255,255,255,.05)';card.style.borderColor='rgba(167,242,140,.14)';glow.style.opacity='0'});
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}
+</script>
+</body>
+</html>

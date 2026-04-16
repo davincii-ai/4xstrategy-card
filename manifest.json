@@ -1,0 +1,24 @@
+{
+  "name": "4xStrategy Digital Business Card",
+  "short_name": "4xStrategy",
+  "description": "Systematic FX Intelligence",
+  "start_url": "/4xstrategy-card/",
+  "display": "standalone",
+  "background_color": "#05080d",
+  "theme_color": "#05080d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/4xstrategy-card/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/4xstrategy-card/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
